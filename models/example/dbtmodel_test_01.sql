@@ -1,2 +1,2 @@
-select *
+select customer_id
 from adwords.t_ft_gads_campaign_se
