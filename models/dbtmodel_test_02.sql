@@ -1,2 +1,7 @@
-select date
-from adwords.t_ft_gads_campaign_se
+{{ config(
+    materialized="view",
+    schema="marketing"
+) }}
+
+select *
+from {{ ref('dbtmodel_test_01') }}
