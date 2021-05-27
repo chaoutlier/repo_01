@@ -44,6 +44,7 @@ from (
         Date,
         sum(Hours) sum_Hours
     from `gentle-charmer-297601.dbt_wchen_shyft6.Time_Logs`
+    group by 1,2,3
     ) a
 left join {{ref('linkJobStartDateOfTheJob')}} b
     on a.User_Name =b.User_Name and a.Project =b.Project and a.Date =b.Date
@@ -53,6 +54,10 @@ left join {{ref('rateTable01')}} d
     on a.User_Name =d.User and a.Project =d.Project and b.Job_Start_Date_OT =d.Job_Start_Date
 left join {{ref('rateTable01')}} e
     on a.User_Name =e.User and a.Project =e.Project and b.Job_Start_Date_DT =e.Job_Start_Date
+where
+        c.Job_Name  LIKE '%Regular%'
+    and d.Job_Name  LIKE '%OT%'
+    and e.Job_Name  LIKE '%DT%'
 
 
 
