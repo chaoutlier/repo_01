@@ -78,11 +78,14 @@
 ----------------------------------------------------------------------------------------------------------------
 SELECT
     a.User_Name,
+    e.EmployeeID,
     a.Project,
     a.Date,
     max(b.Job_Start_Date) Job_Start_Date_RT,
     max(c.Job_Start_Date) Job_Start_Date_OT,
     max(d.Job_Start_Date) Job_Start_Date_DT,
+
+    max(f.Date_of_Employment) Date_of_Employment
 
 FROM `gentle-charmer-297601.dbt_wchen_shyft6.Time_Logs` a
 left join {{ref('rateTable01')}} b
@@ -91,9 +94,14 @@ left join {{ref('rateTable01')}} c
     on a.User_Name=c.User and a.Project= c.Project and a.Date>= c.Job_Start_Date
 left join {{ref('rateTable01')}} d
     on a.User_Name=d.User and a.Project= d.Project and a.Date>= d.Job_Start_Date
+left join `gentle-charmer-297601.dbt_wchen_shyft6.Employee` e
+    on a.User_Name=e.ID
+left join `gentle-charmer-297601.dbt_wchen_shyft6.Dep_Org` f
+    on e.EmployeeID =cast(f.Employee_ID as string) and a.Date>=f.Date_of_Employment
+
 
 where
         b.Job_Name  LIKE '%Regular%'
     and c.Job_Name  LIKE '%OT%'
     and d.Job_Name  LIKE '%DT%'
-group by 1,2,3
+group by 1,2,3,4

@@ -27,9 +27,13 @@
 
 
 select
-    b.Job_Start_Date_RT,
-    b.Job_Start_Date_OT,
-    b.Job_Start_Date_DT,
+    f.Business_Development BD,
+    f.Account_Manager AM,
+    f.Recruiter RC,
+    -- b.Job_Start_Date_RT,
+    -- b.Job_Start_Date_OT,
+    -- b.Job_Start_Date_DT,
+    -- b.Date_of_Employment,
     c.RPH_fromAssignees RPH_fromAssignees_RT,
     c.RPH_fromJobs RPH_fromJobs_RT,
     d.RPH_fromAssignees RPH_fromAssignees_OT,
@@ -54,6 +58,10 @@ left join {{ref('rateTable01')}} d
     on a.User_Name =d.User and a.Project =d.Project and b.Job_Start_Date_OT =d.Job_Start_Date
 left join {{ref('rateTable01')}} e
     on a.User_Name =e.User and a.Project =e.Project and b.Job_Start_Date_DT =e.Job_Start_Date
+
+left join `gentle-charmer-297601.dbt_wchen_shyft6.Dep_Org` f
+    on b.EmployeeID =cast(f.Employee_ID as string) and b.Date_of_Employment =f.Date_of_Employment
+
 where
         c.Job_Name  LIKE '%Regular%'
     and d.Job_Name  LIKE '%OT%'
